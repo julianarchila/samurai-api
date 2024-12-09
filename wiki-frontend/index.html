@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      prefix: "tw-",
+      content: ["./src/**/*.{html,js,jsx}"],
+    };
+  </script>
+  <script>
+    // UTILITIES
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => document.querySelectorAll(selector);
+
+    function traer_info_pokemon() {
+      const QUERY = 1;
+      const $PokeTabla = $("#info_pokemon");
+
+      fetch(`https://pokeapi.co/api/v2/generation/${QUERY}/`)
+        .then((res) => res.json())
+        .then((data) => {
+          // Limpiar contenido previo
+          $PokeTabla.innerHTML = "";
+
+          // Crear lista desordenada
+          const ul = document.createElement("ul");
+
+          // Iterar sobre los resultados de Pokémon y crear elementos <li>
+          data.pokemon_species.forEach((pokemon) => {
+            const li = document.createElement("li");
+            li.textContent = pokemon.name;
+            ul.appendChild(li);
+          });
+
+          // Insertar la lista en el div de info_pokemon
+          $PokeTabla.appendChild(ul);
+        })
+        .catch((error) => console.error(error));
+    }
+
+    function traer_info_bakugan() {
+      const QUERY = 1;
+      const $PokeTabla = $("#info_bakugan");
+
+      fetch("/api/bakugan/get-all-bakugan")
+        .then((res) => res.json())
+        .then((data) => {
+          // Limpiar contenido previo
+          $PokeTabla.innerHTML = "";
+
+          // Crear lista desordenada
+          const ul = document.createElement("ul");
+
+          // Iterar sobre los resultados de Pokémon y crear elementos <li>
+          data.forEach((pokemon) => {
+            const li = document.createElement("li");
+            li.textContent = pokemon.name;
+            ul.appendChild(li);
+          });
+
+          // Insertar la lista en el div de info_pokemon
+          $PokeTabla.appendChild(ul);
+        })
+        .catch((error) => console.error(error));
+
+      /* fetch(`/api/v2/generation/${QUERY}/`)
+  .then((res) => res.json())
+  .then((data) => {
+    // Limpiar contenido previo
+    $PokeTabla.innerHTML = "";
+
+    // Crear lista desordenada
+    const ul = document.createElement("ul");
+
+    // Iterar sobre los resultados de Pokémon y crear elementos <li>
+    data.pokemon_species.forEach((pokemon) => {
+      const li = document.createElement("li");
+      li.textContent = pokemon.name;
+      ul.appendChild(li);
+    });
+
+    // Insertar la lista en el div de info_pokemon
+    $PokeTabla.appendChild(ul);
+  })
+  .catch((error) => console.error(error)); */
+    }
+  </script>
+  <link rel="stylesheet" href="/styles/global.css" />
+  <title>Wiki-freak Oficial</title>
+</head>
+
+<body class="tw-bg-black">
+  <main class="tw-mt-5 tw-mx-5">
+    <section>
+      <div class="tw-bg-white tw-rounded-lg tw-px-6 tw-py-4">
+        <span class="tw-text-4xl">Hola y Bienvenido al Sistema de Wiki-Freak 🤗</span>
+      </div>
+    </section>
+
+    <section class="tw-grid tw-grid-cols-3 tw-gap-4 tw-mt-5">
+      <div class="tw-bg-white tw-rounded-lg tw-px-6 tw-py-4 tw-text-center">
+        <button onclick="traer_info_pokemon()"
+          class="tw-bg-slate-500 tw-px-4 tw-py-3 tw-text-white tw-rounded-lg hover:tw-bg-slate-600 active:tw-bg-slate-800">
+          Traer Información
+        </button>
+        <div id="info_pokemon">
+          <div id="insertado"></div>
+        </div>
+        <div>Aqui va lo de PokeAPI</div>
+      </div>
+      <div class="tw-bg-white tw-rounded-lg tw-px-6 tw-py-4">
+        Aqui va lo de OnePieceAPI
+      </div>
+      <div class="tw-bg-white tw-rounded-lg tw-px-6 tw-py-4">
+        Aquí va lo de BakuganAPI
+        <button onclick="traer_info_bakugan()"
+          class="tw-bg-slate-500 tw-px-4 tw-py-3 tw-text-white tw-rounded-lg hover:tw-bg-slate-600 active:tw-bg-slate-800">
+          Traer Información
+        </button>
+
+        <div id="info_bakugan">
+          <div id="insertado"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>

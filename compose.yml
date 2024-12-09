@@ -1,0 +1,56 @@
+volumes:
+  bakugan-db-data:
+services:
+  poke:
+    build:
+      context: ./api/poke
+      dockerfile: Dockerfile
+
+    image: poke
+    volumes:
+      - ./api/poke:/usr/src/app
+    ports:
+      - 3000:3000
+
+  bakugan:
+    build:
+      context: ./api/bakugan
+      dockerfile: Dockerfile
+
+    depends_on:
+      - bakugan-db
+    image: bakugan
+    volumes:
+      - ./api/bakugan:/app
+    ports:
+      - 5000:5000
+    environment:
+      - DB_HOST=bakugan-db
+      - DB_USER=bakugan
+      - DB_PASS=bakugan
+      - DB_NAME=bakugan
+      - PORT_DB=3306
+
+  bakugan-db:
+    image: mysql:8.0.33
+    volumes:
+      - bakugan-db-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bakugan
+      MYSQL_USER: bakugan
+      MYSQL_PASSWORD: bakugan
+
+    ports:
+      - 3306:3306
+
+  wiki-frontend:
+    build:
+      context: ./wiki-frontend
+      dockerfile: Dockerfile
+
+    image: wiki-frontend
+    volumes:
+      - ./wiki-frontend:/usr/share/nginx/html
+    ports:
+      - 8080:80
